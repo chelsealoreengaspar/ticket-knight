@@ -1,6 +1,13 @@
 /* Ticket Knight - shared helpers used by index.html, admin.html and scanner.html */
 (function () {
   'use strict';
+  // Custom logo: if img/logo.png exists it replaces the knight icon everywhere.
+  (function () {
+    const img = new Image();
+    img.onload = () => document.documentElement.classList.add('has-logo');
+    img.src = 'img/logo.png';
+  })();
+
   const C = window.TK_CONFIG || {};
   const configured = !!(C.SUPABASE_URL && C.SUPABASE_ANON_KEY && !/YOUR-/i.test(C.SUPABASE_URL + C.SUPABASE_ANON_KEY));
   const sb = configured && window.supabase ? window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY) : null;
