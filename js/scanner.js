@@ -9,7 +9,7 @@
  */
 (function () {
   'use strict';
-  const { sb, $, esc, toast } = TK;
+  const { sb, $, esc, toast, modal } = TK;
   const K = { cfg: 'tk_scanner_cfg', bundle: 'tk_scanner_bundle', ledger: 'tk_scanner_ledger', queue: 'tk_scanner_queue', recent: 'tk_scanner_recent' };
   const REASONS = {
     INVALID_SIGNATURE: 'Invalid signature: forged, altered or unreadable code',
@@ -67,7 +67,28 @@
       save(K.cfg, cfg); applyBundle(b); show('g2');
     } catch (e) { $('#cM').textContent = e.message; }
   };
-  $('#cSignOut').onclick = async () => { await sb.auth.signOut(); location.reload(); };
+  $('#cSignOut').onclick = async () => { await signOutScanner(); location.reload(); };
+
+  // ---------- exit to the Welcome screen ----------
+  async function signOutScanner() {
+    await trySync();                       // push queued scans first if online
+    try { await sb.auth.signOut(); } catch (e) { /* offline: local session is still cleared */ }
+    localStorage.removeItem(K.cfg); localStorage.removeItem(K.bundle);  // next staff member sets up again
+    cfg = null; bundle = null;              // queue + ledger stay so nothing is lost
+  }
+  function exitScanner() {
+    if (pending) { toast('Confirm or deny the current ticket first.'); return; }
+    const unsynced = queue.length
+      ? '<p class="msg" style="margin-top:8px">' + queue.length + ' scan(s) are not synced yet. They stay saved on this device and upload the next time the scanner is opened online.</p>' : '';
+    const signedIn = TK.configured && sb;
+    modal('Leave the gate scanner?',
+      'Exit keeps you signed in and keeps the offline data, so this device can resume scanning right away.' +
+      (signedIn ? ' Sign out & exit clears this gate setup for the next staff member.' : '') + unsynced,
+      [{ label: 'Exit to Welcome', fn: async () => { await stopCam(); location.href = 'index.html'; } }]
+        .concat(signedIn ? [{ label: 'Sign out & exit', cls: 'ghost', fn: async () => { await stopCam(); await signOutScanner(); location.href = 'index.html'; } }] : [])
+        .concat([{ label: 'Stay', cls: 'light' }]));
+  }
+  document.querySelectorAll('[data-exit]').forEach(b => b.onclick = exitScanner);
   $('#toSetup').onclick = () => {
     stopCam(); show('g1');
     if (TK.configured && navigator.onLine) sb.auth.getSession().then(r => { if (r.data.session) openConfig(); });

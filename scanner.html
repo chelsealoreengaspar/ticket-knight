@@ -14,7 +14,7 @@
 
   <!-- SETUP: sign in, choose event + gate, download offline data -->
   <section class="screen active" id="g1" aria-label="Scanner setup">
-    <div class="top"><div class="logo" aria-hidden="true">&#9822;</div><h1 class="nox">GATE SETUP</h1></div>
+    <div class="top"><div class="logo" aria-hidden="true">&#9822;</div><h1>GATE SETUP</h1><button class="x" type="button" data-exit aria-label="Exit to Welcome">X</button></div>
     <div class="rule"></div>
     <div class="body narrow">
       <p class="lead">Sign in once while online, pick your event and gate, then download the offline data. After that the scanner works with no connection.</p>
@@ -34,11 +34,14 @@
       </div>
       <p class="hint" id="pkNote"></p>
     </div>
+    <div class="foot">
+      <button class="btn light" type="button" data-exit>Exit to Welcome</button>
+    </div>
   </section>
 
   <!-- SCAN -->
   <section class="screen" id="g2" aria-label="Scanner">
-    <div class="top"><div class="logo" aria-hidden="true">&#9822;</div><h1>GATE SCANNER</h1><button class="x" type="button" id="toSetup" aria-label="Scanner settings">&#9881;</button></div>
+    <div class="top"><div class="logo" aria-hidden="true">&#9822;</div><h1>GATE SCANNER</h1><button class="x" type="button" data-exit aria-label="Exit to Welcome">X</button></div>
     <div class="rule"></div>
     <div class="body">
       <div class="netline" id="netline"></div>
@@ -61,6 +64,12 @@
           <button class="btn sm ghost" id="tamperBtn" type="button" style="width:100%">Run tamper test</button>
           <div id="tamperOut" class="hint" style="margin-top:6px"></div>
         </div>
+      </div>
+    </div>
+    <div class="foot">
+      <div class="row2">
+        <button class="btn light" type="button" id="toSetup">Gate Settings</button>
+        <button class="btn" type="button" data-exit>Exit</button>
       </div>
     </div>
   </section>
