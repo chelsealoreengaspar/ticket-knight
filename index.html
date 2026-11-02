@@ -9,17 +9,24 @@
 </head>
 <body>
 <div class="stage">
-<main class="phone" id="phone">
+<main class="phone app" id="phone">
 
   <!-- SCREEN 1: WELCOME -->
   <section class="screen active" id="s1" aria-label="Welcome">
-    <div class="body" style="text-align:center;padding-top:26px">
-      <div id="setupNote"></div>
-      <div class="logo big" aria-hidden="true" style="margin:0 auto 10px">&#9822;</div>
-      <h1 style="margin:0;font-size:24px;letter-spacing:.02em">TICKET KNIGHT</h1>
-      <p style="margin:4px 0 16px;font-size:11px;letter-spacing:.04em;color:#33415c" id="welcomeLine">WELCOME CONCERT GOER!<br>SECURE YOUR TICKET WITH TICKET KNIGHT</p>
-      <div id="welcomeEvents"><p class="hint">Loading events&hellip;</p></div>
-      <p class="staff-links">Staff: <a href="admin.html">Admin dashboard</a> &middot; <a href="scanner.html">Gate scanner</a></p>
+    <div class="body">
+      <div class="welcome">
+        <div class="hero">
+          <div id="setupNote"></div>
+          <div class="logo big" aria-hidden="true">&#9822;</div>
+          <h1 class="brand">TICKET KNIGHT</h1>
+          <p class="tagline" id="welcomeLine">WELCOME CONCERT GOER!<br>SECURE YOUR TICKET WITH TICKET KNIGHT</p>
+          <p class="staff-links">Staff: <a href="admin.html">Admin dashboard</a> &middot; <a href="scanner.html">Gate scanner</a></p>
+        </div>
+        <div class="events">
+          <div class="section-h wide-only">FEATURED EVENTS</div>
+          <div id="welcomeEvents" class="ev-grid"><p class="hint">Loading events&hellip;</p></div>
+        </div>
+      </div>
     </div>
     <div class="foot" id="s1foot"></div>
   </section>
@@ -30,7 +37,7 @@
     <div class="rule"></div>
     <div class="body">
       <p class="lead" id="regLead">Enter your details and verify your account.</p>
-      <div class="card">
+      <div class="card form-grid">
         <div class="field" id="f-name"><label for="fName">Full Name</label><input id="fName" autocomplete="name" placeholder="Enter Full Name"><div class="msg" aria-live="polite"></div></div>
         <div class="field" id="f-contact"><label for="fContact">Contact Number</label><input id="fContact" inputmode="tel" autocomplete="tel" placeholder="+63 9XX XXX XXXX"><div class="msg" aria-live="polite"></div></div>
         <div class="two">
@@ -62,22 +69,33 @@
   <section class="screen" id="s3" aria-label="Select Seats">
     <div class="top"><div class="logo" aria-hidden="true">&#9822;</div><h1>SELECT SEATS</h1><button class="x" type="button" data-close aria-label="Cancel booking">X</button></div>
     <div class="rule"></div>
+    <ol class="steps" aria-label="Booking progress"><li class="on">Seats</li><li>Holders</li><li>Ticket</li></ol>
     <div class="body">
-      <div class="carousel" id="evCards" role="group" aria-label="Choose a concert"></div>
-      <div class="dots" id="evDots"></div>
-      <div class="tabs" id="tierTabs" role="group" aria-label="Choose a ticket tier"></div>
-      <div class="map" role="group" aria-label="Seat map">
-        <div class="stage-l">STAGE</div>
-        <div class="grid" id="grid"></div>
-        <div class="legend"><span><i class="s t"></i>taken</span><span><i class="s"></i>empty</span><span><i class="s a"></i>assigned</span></div>
+      <div class="split seat-layout">
+        <div class="pane">
+          <div class="label-h">1. CONCERT</div>
+          <div class="carousel" id="evCards" role="group" aria-label="Choose a concert"></div>
+          <div class="dots" id="evDots"></div>
+          <div class="label-h">2. TIER</div>
+          <div class="tabs" id="tierTabs" role="group" aria-label="Choose a ticket tier"></div>
+          <div class="label-h">3. NUMBER OF TICKETS</div>
+          <div class="qty">
+            <div><b>QUANTITY</b><small>maximum of 6 tickets per account</small><br><small id="quota"></small></div>
+            <div class="stepper"><button type="button" id="qMinus" aria-label="Decrease quantity">-</button><output id="qVal" aria-live="polite">1</output><button type="button" id="qPlus" aria-label="Increase quantity">+</button></div>
+          </div>
+          <div class="holdrow"><span class="chip hold" id="holdChip">Seat held: --:--</span><button class="linkbtn" type="button" data-go="6" style="padding:0 4px">My Tickets</button></div>
+          <div class="msg" id="s3msg" aria-live="polite" style="margin-top:6px"></div>
+        </div>
+        <div class="pane">
+          <div class="label-h">4. SEATS</div>
+          <div class="map" role="group" aria-label="Seat map">
+            <div class="stage-l">STAGE</div>
+            <div class="grid" id="grid"></div>
+            <div class="legend"><span><i class="s t"></i>taken</span><span><i class="s"></i>empty</span><span><i class="s a"></i>assigned</span></div>
+          </div>
+          <div class="seatline" id="seatLine" aria-live="polite">Choose a concert and a tier. Best seats are assigned automatically; tap an empty seat in your tier to change.</div>
+        </div>
       </div>
-      <div class="seatline" id="seatLine" aria-live="polite">Choose a concert and a tier. Best seats are assigned automatically; tap an empty seat in your tier to change.</div>
-      <div class="qty">
-        <div><b>QUANTITY</b><small>maximum of 6 tickets per account</small><br><small id="quota"></small></div>
-        <div class="stepper"><button type="button" id="qMinus" aria-label="Decrease quantity">-</button><output id="qVal" aria-live="polite">1</output><button type="button" id="qPlus" aria-label="Increase quantity">+</button></div>
-      </div>
-      <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center"><span class="chip hold" id="holdChip">Seat held: --:--</span><button class="linkbtn" type="button" data-go="6" style="padding:0 4px">My Tickets</button></div>
-      <div class="msg" id="s3msg" aria-live="polite" style="margin-top:6px"></div>
     </div>
     <div class="foot">
       <div class="hint" id="s3hint" style="text-align:center"></div>
@@ -89,7 +107,10 @@
   <section class="screen" id="s4" aria-label="Review Ticket">
     <div class="top"><div class="logo" aria-hidden="true">&#9822;</div><h1>REVIEW TICKET</h1><button class="x" type="button" data-close aria-label="Cancel booking">X</button></div>
     <div class="rule"></div>
+    <ol class="steps" aria-label="Booking progress"><li class="done">Seats</li><li class="on">Holders</li><li>Ticket</li></ol>
     <div class="body">
+      <div class="split review-layout">
+      <div class="pane">
       <div class="h3"><span>TICKET HOLDERS</span><span id="hCount"></span></div>
       <div class="card">
         <div class="hint" id="hSeat" style="margin-bottom:8px;font-weight:700"></div>
@@ -106,9 +127,13 @@
           </div>
         </div>
       </div>
-      <div class="h3" style="margin-top:16px" id="sumHead"><span>ORDER SUMMARY</span><span class="chip hold" id="holdChip4" style="padding:4px 10px">Seat held: --:--</span></div>
+      </div>
+      <div class="pane">
+      <div class="h3" id="sumHead"><span>ORDER SUMMARY</span><span class="chip hold" id="holdChip4" style="padding:4px 10px">Seat held: --:--</span></div>
       <div class="sum" id="sum"></div>
       <div class="msg" id="s4msg" aria-live="polite" style="margin-top:8px"></div>
+      </div>
+      </div>
     </div>
     <div class="foot">
       <div class="row2">
@@ -123,6 +148,7 @@
   <section class="screen" id="s5" aria-label="Digital Ticket">
     <div class="top"><div class="logo" aria-hidden="true">&#9822;</div><h1 class="nox">DIGITAL TICKET</h1></div>
     <div class="rule"></div>
+    <ol class="steps" aria-label="Booking progress"><li class="done">Seats</li><li class="done">Holders</li><li class="on">Ticket</li></ol>
     <div class="body">
       <div class="status" id="s5status">Ticket Ready<i aria-hidden="true"></i></div>
       <div class="tix" id="tix"></div>

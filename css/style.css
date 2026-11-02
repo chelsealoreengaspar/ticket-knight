@@ -221,8 +221,153 @@ button.s.a:hover{background:var(--navy-hover)}
 .admin .overlay{position:fixed;align-items:center;justify-content:center}
 .admin .sheet{max-width:440px;border-radius:18px}
 
-@media (max-width:430px){
+/* =====================================================================
+   RESPONSIVE LAYOUT
+   phone (< 600px)      full screen, single column (the Figma layout)
+   tablet (600-899px)   centered phone-style frame
+   computer (>= 900px)  wide app window, two-column screens
+   ===================================================================== */
+
+/* ---------- shared pieces used at every size ---------- */
+.welcome .hero{text-align:center;padding-top:14px}
+.welcome .hero .logo.big{margin:0 auto 10px}
+.brand{margin:0;font-size:24px;letter-spacing:.02em}
+.tagline{margin:4px 0 16px;font-size:11px;letter-spacing:.04em;color:#33415c}
+.wide-only{display:none}
+.label-h{font-size:11px;font-weight:800;letter-spacing:.08em;color:#27456f;margin:12px 2px 6px}
+.pane>.label-h:first-child{margin-top:0}
+.holdrow{margin-top:10px;display:flex;justify-content:space-between;align-items:center}
+.qty{margin-top:0}
+.review-layout .pane+.pane{margin-top:16px}
+.split .pane{min-width:0}
+.result.idle{background:#fff;color:#27456f;border:1.5px dashed #8fa4d3}
+.result.idle h2{font-size:22px}
+
+/* progress stepper */
+.steps{list-style:none;display:flex;gap:6px;margin:10px 16px 0;padding:0;counter-reset:st}
+.steps li{flex:1;display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#6b7896;letter-spacing:.03em;counter-increment:st}
+.steps li:before{content:counter(st);flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1.5px solid #9db0d7;color:#6b7896;font-size:11px}
+.steps li:after{content:"";flex:1;height:2px;background:#9db0d7;border-radius:2px}
+.steps li:last-child:after{display:none}
+.steps li.on{color:var(--navy)}
+.steps li.on:before{background:var(--navy);border-color:var(--navy);color:#fff}
+.steps li.done{color:var(--green)}
+.steps li.done:before{content:"\2713";background:var(--green);border-color:var(--green);color:#fff}
+.steps li.done:after{background:var(--green)}
+
+/* interactivity: screen transitions + hover feedback */
+@keyframes tkIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.screen.active{animation:tkIn .22s ease-out}
+.ev{transition:transform .15s,box-shadow .15s}
+.ev:hover{transform:translateY(-2px);box-shadow:0 10px 24px #0b1b3d40}
+.mt{transition:transform .15s,box-shadow .15s}
+.mt:hover{transform:translateY(-2px);box-shadow:0 8px 20px #1b2a4a24}
+.tabs button{transition:transform .12s,background .12s}
+.tabs button:hover:not(:disabled){transform:translateY(-1px);background:#3d5a9c}
+.tabs button[aria-pressed=true]:hover{background:var(--navy)}
+button.s{transition:transform .1s,background .1s}
+button.s:hover{transform:scale(1.12)}
+.stepper button{transition:background .12s}
+.stepper button:hover:not(:disabled){background:#d4def3}
+.overlay:not(.hide) .sheet{animation:tkIn .2s ease-out}
+
+/* ---------- phone ---------- */
+@media (max-width:599px){
   .stage{padding:0}
-  .phone{width:100%;height:100vh;height:100dvh;min-height:0;border-radius:0}
+  .phone{width:100%;height:100vh;height:100dvh;min-height:0;border-radius:0;box-shadow:none}
 }
-@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* ---------- tablet: centered frame ---------- */
+@media (min-width:600px) and (max-width:899px){
+  .phone{width:480px}
+}
+
+/* ---------- computer: wide two-column app ---------- */
+@media (min-width:900px){
+  .stage{padding:24px}
+  .phone.app{width:min(1200px,100%);height:calc(100vh - 48px);min-height:620px;border-radius:24px}
+  .phone.app:before{width:520px;height:520px;right:-160px;top:-180px}
+  .app .top{padding:16px 28px 8px}
+  .app .top h1{font-size:24px}
+  .app .rule{margin:0 28px}
+  .app .body{padding:20px 28px}
+  .app .steps{margin:14px 28px 0;max-width:560px}
+  .app .steps li{font-size:12px}
+  .wide-only{display:block}
+
+  /* footer becomes a right-aligned action bar */
+  .app .foot{display:flex;justify-content:flex-end;align-items:center;gap:12px;padding:14px 28px 22px;border-top:1px solid #c5d0e6;background:#dfe5f0cc}
+  .app .foot>.hint{flex:1;text-align:left!important}
+  .app .foot>.btn{min-width:240px}
+  .app .foot>.row2{width:520px}
+  .app .foot>.linkbtn{order:-1;margin-right:auto}
+
+  /* two-column screens */
+  .split{display:grid;gap:28px;align-items:start}
+  .seat-layout{grid-template-columns:minmax(340px,400px) 1fr}
+  .review-layout{grid-template-columns:minmax(360px,1fr) minmax(360px,440px)}
+  .review-layout .pane+.pane{margin-top:0;position:sticky;top:0}
+  .scan-layout{grid-template-columns:minmax(320px,460px) 1fr}
+  .scan-layout .result{margin-top:0}
+
+  /* welcome: hero on the left, event grid on the right */
+  #s1.active{display:grid;grid-template-columns:minmax(340px,400px) 1fr;grid-template-rows:1fr 1fr}
+  #s1 .body,#s1 .welcome{display:contents}
+  #s1 .hero{grid-column:1;grid-row:1;align-self:end;padding:32px 36px 8px}
+  #s1 .events{grid-column:2;grid-row:1/3;overflow-y:auto;min-height:0;padding:32px 32px 32px 8px}
+  #s1 .foot{grid-column:1;grid-row:2;align-self:start;display:grid;grid-template-columns:1fr;justify-content:stretch;border-top:0;background:none;padding:8px 36px 32px}
+  #s1 .foot .btn{min-width:0;width:100%}
+  #s1 .foot .linkbtn{order:0;margin:0}
+  .logo.big{width:110px;height:110px;font-size:68px;border-radius:26px}
+  .brand{font-size:34px}
+  .tagline{font-size:13px}
+  .ev-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+  .ev-grid .ev{height:230px;margin:0}
+  .ev-grid .ev h3{font-size:28px}
+  .ev-grid .ev p{font-size:13px}
+
+  /* create account: two-column form, centered */
+  #s2 .body>*{max-width:820px;margin-left:auto;margin-right:auto}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;column-gap:18px}
+  .form-grid .two{display:contents}
+  .form-grid #f-idno{grid-column:1/-1}
+  #s2 .otp{grid-template-columns:180px 1fr}
+
+  /* seats: roomier map, events stacked instead of swiping */
+  .seat-layout .carousel{flex-direction:column;overflow:visible}
+  .seat-layout .carousel .ev{flex:none;width:100%;height:96px}
+  .seat-layout #evDots{display:none}
+  .seat-layout .map{padding:20px 22px}
+  .seat-layout .grid{gap:7px;max-width:540px;margin:0 auto}
+  .seat-layout .stage-l{max-width:540px;margin:0 auto 14px;font-size:12px;padding:10px 0;background:#eef3fc;border:0;border-radius:8px}
+  .seat-layout .legend{font-size:12px;margin-top:14px}
+  .seat-layout .seatline{font-size:13px;text-align:center}
+
+  /* tickets: side by side instead of a swipe carousel */
+  #s5 .tix{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px;overflow:visible}
+  #s5 #tixDots{display:none}
+  #s5 .status{font-size:16px}
+
+  /* my tickets: card grid */
+  .mt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+  .mt-grid .mt{margin:0}
+  #mineBody .setup,#mineBody>.hint{max-width:720px}
+
+  /* scanner setup */
+  .body.narrow>*{max-width:460px;margin-left:auto;margin-right:auto}
+  .scan-layout .reader{min-height:220px;display:grid;place-items:center}
+  .scan-layout .reader:empty:before{content:"Camera preview";color:#9fb3da;font-size:12px;letter-spacing:.1em}
+}
+
+/* dialogs, toasts and the SMS banner on larger screens */
+@media (min-width:600px){
+  .overlay{align-items:center;justify-content:center;padding:16px}
+  .sheet{max-width:480px;border-radius:20px;max-height:90%}
+  .toast{left:50%;right:auto;transform:translateX(-50%);width:min(440px,calc(100% - 32px))}
+}
+@media (min-width:900px){
+  .app .sms{left:auto;right:24px;top:20px;width:380px}
+  .app .toast{bottom:100px}
+}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}

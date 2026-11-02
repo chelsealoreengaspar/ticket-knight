@@ -9,13 +9,13 @@
 </head>
 <body>
 <div class="stage">
-<main class="phone" id="phone">
+<main class="phone app" id="phone">
 
   <!-- SETUP: sign in, choose event + gate, download offline data -->
   <section class="screen active" id="g1" aria-label="Scanner setup">
     <div class="top"><div class="logo" aria-hidden="true">&#9822;</div><h1 class="nox">GATE SETUP</h1></div>
     <div class="rule"></div>
-    <div class="body">
+    <div class="body narrow">
       <p class="lead">Sign in once while online, pick your event and gate, then download the offline data. After that the scanner works with no connection.</p>
       <div class="card" id="loginCard">
         <div class="field"><label for="gE">Staff email</label><input id="gE" type="email" autocomplete="email"></div>
@@ -41,20 +41,26 @@
     <div class="rule"></div>
     <div class="body">
       <div class="netline" id="netline"></div>
-      <div class="reader" id="reader"></div>
-      <div class="row2" style="margin-top:8px">
-        <button class="btn sm" id="camBtn" type="button">Start camera</button>
-        <button class="btn sm ghost" id="syncBtn" type="button">Sync now</button>
+      <div class="split scan-layout">
+        <div class="pane">
+          <div class="reader" id="reader"></div>
+          <div class="row2" style="margin-top:8px">
+            <button class="btn sm" id="camBtn" type="button">Start camera</button>
+            <button class="btn sm ghost" id="syncBtn" type="button">Sync now</button>
+          </div>
+          <div class="field" style="margin-top:10px"><label for="manual">Or paste the ticket code (from the QR)</label><textarea id="manual" placeholder="TK1.xxxxx.yyyyy"></textarea></div>
+          <button class="btn blue" id="validateBtn" type="button" style="width:100%">Validate</button>
+        </div>
+        <div class="pane">
+          <div id="result"><div class="result idle"><h2>READY</h2><p>Scan a ticket QR or paste its code.</p></div></div>
+          <div class="section-h">LAST SCANS ON THIS DEVICE</div>
+          <div id="recent" class="hint">None yet.</div>
+          <div class="section-h">SELF-TEST (NFR-003)</div>
+          <p class="hint">Takes the last valid code, alters one field at a time 1,000 times, and confirms every altered barcode fails signature validation.</p>
+          <button class="btn sm ghost" id="tamperBtn" type="button" style="width:100%">Run tamper test</button>
+          <div id="tamperOut" class="hint" style="margin-top:6px"></div>
+        </div>
       </div>
-      <div class="field" style="margin-top:10px"><label for="manual">Or paste the ticket code (from the QR)</label><textarea id="manual" placeholder="TK1.xxxxx.yyyyy"></textarea></div>
-      <button class="btn blue" id="validateBtn" type="button" style="width:100%">Validate</button>
-      <div id="result"></div>
-      <div class="section-h">LAST SCANS ON THIS DEVICE</div>
-      <div id="recent" class="hint">None yet.</div>
-      <div class="section-h">SELF-TEST (NFR-003)</div>
-      <p class="hint">Takes the last valid code, alters one field at a time 1,000 times, and confirms every altered barcode fails signature validation.</p>
-      <button class="btn sm ghost" id="tamperBtn" type="button" style="width:100%">Run tamper test</button>
-      <div id="tamperOut" class="hint" style="margin-top:6px"></div>
     </div>
   </section>
 

@@ -523,23 +523,23 @@
     let h = '';
     if (pending) h += '<div class="setup">Some tickets are not signed yet. <button class="linkbtn" type="button" id="retrySign" style="padding:0;min-height:0">Retry signing</button></div>';
     if (inc.length) {
-      h += '<div class="section-h">INCOMING TRANSFERS</div>' + inc.map(x =>
+      h += '<div class="section-h">INCOMING TRANSFERS</div><div class="mt-grid">' + inc.map(x =>
         '<div class="mt"><div class="row"><div><h4>' + esc(x.events ? x.events.name : x.event_id) + '</h4><p>From ' + esc(x.from_email) + ' &middot; Seat ' + esc(x.seat) + ' &middot; ' + esc(x.tier) + '</p><p>A new ticket will be issued in your name. Transferred tickets cannot be transferred again.</p></div></div>' +
-        '<div class="acts"><button class="btn sm green" type="button" data-acc="' + x.id + '">Accept</button><button class="btn sm ghost" type="button" data-dec="' + x.id + '">Decline</button></div></div>').join('');
+        '<div class="acts"><button class="btn sm green" type="button" data-acc="' + x.id + '">Accept</button><button class="btn sm ghost" type="button" data-dec="' + x.id + '">Decline</button></div></div>').join('') + '</div>';
     }
     if (out.length) {
-      h += '<div class="section-h">OUTGOING TRANSFERS</div>' + out.map(x =>
+      h += '<div class="section-h">OUTGOING TRANSFERS</div><div class="mt-grid">' + out.map(x =>
         '<div class="mt"><div class="row"><div><h4>' + esc(x.events ? x.events.name : x.event_id) + '</h4><p>To ' + esc(x.to_email) + ' &middot; Seat ' + esc(x.seat) + ' &middot; waiting for them to accept</p></div><span class="chip sm info">Pending</span></div>' +
-        '<div class="acts"><button class="btn sm ghost" type="button" data-cancel="' + x.id + '">Cancel transfer</button></div></div>').join('');
+        '<div class="acts"><button class="btn sm ghost" type="button" data-cancel="' + x.id + '">Cancel transfer</button></div></div>').join('') + '</div>';
     }
     h += '<div class="section-h">MY TICKETS</div>';
     if (!S.mine.length) h += '<p class="empty">No tickets yet.</p>';
-    h += S.mine.map(t => {
+    h += '<div class="mt-grid">' + S.mine.map(t => {
       const ev = t.events || {}, hd = TK.holderOf(t) || {}, c = STATUS_CHIP[t.status] || ['', t.status];
       return '<div class="mt"><div class="row"><div><h4>' + esc(ev.name) + '</h4><p>' + esc(TK.fmtWhen(ev.starts_at)) + '</p><p>Seat ' + esc(t.seat) + ' &middot; ' + esc(t.tier) + ' &middot; ' + esc(t.assigned_gate) + '</p><p>' + esc(hd.holder_name) + ' &middot; ' + esc(t.reference) + (t.parent_ticket_id ? ' &middot; received by transfer' : '') + '</p></div><span class="chip sm ' + c[0] + '">' + c[1] + '</span></div>' +
         '<div class="acts"><button class="btn sm" type="button" data-view="' + t.id + '">View ticket</button>' +
         (canTransfer(t) ? '<button class="btn sm ghost" type="button" data-tr="' + t.id + '">Transfer</button>' : '') + '</div></div>';
-    }).join('');
+    }).join('') + '</div>';
     h += '<p class="hint" style="margin-top:12px">Transfer rules: one ticket per event, once, to another verified account, until 24 hours before the event. The original barcode is revoked and a new one is issued to the recipient.</p>';
     $('#mineBody').innerHTML = h;
 
