@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ticket Knight Key Generator</title>
+<style>
+  body{font:14px/1.5 Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#c9d2e3;color:#17233b;margin:0;padding:24px}
+  main{max-width:720px;margin:0 auto;background:#fff;border-radius:16px;padding:24px;box-shadow:0 8px 28px #1b2a4a22}
+  h1{margin:0 0 4px;color:#0f4272}
+  label{display:block;font-weight:700;margin:18px 0 6px}
+  textarea{width:100%;box-sizing:border-box;height:70px;border:1.5px solid #a9b6e6;border-radius:10px;background:#eef3fc;padding:10px;font:13px ui-monospace,Menlo,Consolas,monospace}
+  button{background:#0f4272;color:#fff;border:0;border-radius:12px;padding:14px 18px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;cursor:pointer}
+  .warn{background:#fff6f6;border:1.5px solid #a1262b;border-radius:10px;padding:10px 12px;color:#a1262b;font-weight:600}
+  .ok{background:#eef8f0;border:1.5px solid #237a2c;border-radius:10px;padding:10px 12px;color:#14552e}
+  code{background:#eef3fc;padding:1px 5px;border-radius:4px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Ticket Knight signing keys</h1>
+  <p>Generates one Ed25519 key pair, entirely in this browser. Nothing is uploaded. Run it once.</p>
+  <button id="gen" type="button">Generate key pair</button>
+  <label for="pub">PUBLIC key &rarr; paste into <code>js/config.js</code> as <code>TK_PUBLIC_KEY</code></label>
+  <textarea id="pub" readonly></textarea>
+  <label for="sec">SECRET key &rarr; paste into Supabase as the Edge Function secret <code>TK_SIGNING_KEY</code></label>
+  <textarea id="sec" readonly></textarea>
+  <p class="warn">Never commit the secret key to GitHub or put it in any file of this project. If it leaks, generate a new pair, update both places, and re-issue tickets.</p>
+  <p class="ok" id="test" hidden></p>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/tweetnacl@1.0.3/nacl-fast.min.js"></script>
+<script>
+function b64url(bytes){let s='';bytes.forEach(b=>s+=String.fromCharCode(b));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+document.getElementById('gen').onclick=function(){
+  const kp=nacl.sign.keyPair();
+  document.getElementById('pub').value=b64url(kp.publicKey);
+  document.getElementById('sec').value=b64url(kp.secretKey);
+  const msg=new TextEncoder().encode('ticket-knight-self-test');
+  const ok=nacl.sign.detached.verify(msg,nacl.sign.detached(msg,kp.secretKey),kp.publicKey);
+  const t=document.getElementById('test');t.hidden=false;t.textContent=ok?'Self-test passed: the pair signs and verifies correctly.':'Self-test failed. Generate again.';
+};
+</script>
+</body>
+</html>

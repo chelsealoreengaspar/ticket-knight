@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f4272">
+<title>Ticket Knight Admin</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="admin">
+  <header class="admin-top">
+    <div class="logo" aria-hidden="true">&#9822;</div>
+    <h1>TICKET KNIGHT &middot; ADMINISTRATOR DASHBOARD</h1>
+    <a class="linkbtn" href="index.html">Buyer app</a>
+    <a class="linkbtn" href="scanner.html">Gate scanner</a>
+    <button class="linkbtn hide" id="signOut" type="button">Sign out</button>
+  </header>
+
+  <div class="admin-wrap">
+    <section class="panel login hide" id="loginBox">
+      <h2>Administrator sign in</h2>
+      <p class="hint">Use an account listed in the <code>staff</code> table with role <b>ADMIN</b> (see README Part 5).</p>
+      <div class="field"><label for="aE">Email</label><input id="aE" type="email" autocomplete="email"></div>
+      <div class="field"><label for="aP">Password</label><input id="aP" type="password" autocomplete="current-password"></div>
+      <div class="msg" id="aM" aria-live="polite"></div>
+      <button class="btn" id="aGo" type="button" style="width:100%;margin-top:8px">Sign in</button>
+    </section>
+
+    <div id="dash" class="hide">
+      <nav class="admin-tabs" id="tabs" aria-label="Dashboard sections">
+        <button type="button" data-tab="overview" aria-pressed="true">Overview</button>
+        <button type="button" data-tab="flags" aria-pressed="false">Flagged activity</button>
+        <button type="button" data-tab="tickets" aria-pressed="false">Tickets</button>
+        <button type="button" data-tab="transfers" aria-pressed="false">Transfers</button>
+        <button type="button" data-tab="history" aria-pressed="false">Ticket history</button>
+        <button type="button" data-tab="scans" aria-pressed="false">Scans &amp; SMS</button>
+      </nav>
+      <div id="view"></div>
+    </div>
+  </div>
+
+  <div class="toast hide" id="toast" role="status"></div>
+  <div class="overlay hide" id="overlay"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/common.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

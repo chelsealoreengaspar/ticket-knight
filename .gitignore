@@ -1,0 +1,14 @@
+# secrets: never commit these
+.env
+.env.*
+supabase/.env
+supabase/functions/.env
+*.secret
+secret-key.txt
+
+# tooling
+node_modules/
+.vercel
+.DS_Store
+Thumbs.db
+supabase/.temp/

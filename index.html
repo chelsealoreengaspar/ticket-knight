@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f4272">
+<title>Ticket Knight</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="stage">
+<main class="phone" id="phone">
+
+  <!-- SCREEN 1: WELCOME -->
+  <section class="screen active" id="s1" aria-label="Welcome">
+    <div class="body" style="text-align:center;padding-top:26px">
+      <div id="setupNote"></div>
+      <div class="logo big" aria-hidden="true" style="margin:0 auto 10px">&#9822;</div>
+      <h1 style="margin:0;font-size:24px;letter-spacing:.02em">TICKET KNIGHT</h1>
+      <p style="margin:4px 0 16px;font-size:11px;letter-spacing:.04em;color:#33415c" id="welcomeLine">WELCOME CONCERT GOER!<br>SECURE YOUR TICKET WITH TICKET KNIGHT</p>
+      <div id="welcomeEvents"><p class="hint">Loading events&hellip;</p></div>
+      <p class="staff-links">Staff: <a href="admin.html">Admin dashboard</a> &middot; <a href="scanner.html">Gate scanner</a></p>
+    </div>
+    <div class="foot" id="s1foot"></div>
+  </section>
+
+  <!-- SCREEN 2: CREATE ACCOUNT -->
+  <section class="screen" id="s2" aria-label="Create Account">
+    <div class="top"><div class="logo" aria-hidden="true">&#9822;</div><h1>CREATE ACCOUNT</h1><button class="x" type="button" data-close aria-label="Close and return to Welcome">X</button></div>
+    <div class="rule"></div>
+    <div class="body">
+      <p class="lead" id="regLead">Enter your details and verify your account.</p>
+      <div class="card">
+        <div class="field" id="f-name"><label for="fName">Full Name</label><input id="fName" autocomplete="name" placeholder="Enter Full Name"><div class="msg" aria-live="polite"></div></div>
+        <div class="field" id="f-contact"><label for="fContact">Contact Number</label><input id="fContact" inputmode="tel" autocomplete="tel" placeholder="+63 9XX XXX XXXX"><div class="msg" aria-live="polite"></div></div>
+        <div class="two">
+          <div class="field" id="f-birth"><label for="fBirth">Birthday</label><input id="fBirth" type="date"><div class="msg" aria-live="polite"></div></div>
+          <div class="field" id="f-email"><label for="fEmail">Email</label><input id="fEmail" type="email" autocomplete="email" placeholder="email address"><div class="msg" aria-live="polite"></div></div>
+        </div>
+        <div class="field" id="f-pass"><label for="fPass">Password</label><input id="fPass" type="password" autocomplete="new-password" placeholder="At least 8 characters"><div class="msg" aria-live="polite"></div></div>
+        <div class="field" id="f-idtype"><label for="fIdType">ID Type</label>
+          <select id="fIdType"><option value="">ID Type</option><option>Philippine National ID</option><option>Driver's License</option><option>Passport</option><option>UMID</option><option>PRC ID</option></select><div class="msg" aria-live="polite"></div></div>
+        <div class="field" id="f-idno"><label for="fIdNo">ID Number</label><input id="fIdNo" autocomplete="off" placeholder="id number"><div class="msg" aria-live="polite"></div></div>
+      </div>
+      <div class="otp">
+        <button class="btn" id="sendOtp" type="button" disabled>Send OTP</button>
+        <input id="otpIn" inputmode="numeric" maxlength="6" placeholder="One-Time Password" aria-label="One-Time Password" autocomplete="one-time-code" disabled>
+      </div>
+      <div class="meta"><span class="hint" id="otpHint">Enter a valid contact number to request a code.</span><button class="linkbtn" id="resend" type="button" disabled style="padding:0 4px">Resend</button></div>
+      <div class="msg" id="otpMsg" aria-live="polite"></div>
+      <div style="margin-top:6px"><span class="chip" id="vChip">Unverified</span></div>
+      <div class="msg" id="regMsg" aria-live="polite" style="margin-top:8px"></div>
+      <p class="hint" style="margin-top:10px">Your contact number, email and ID number can each be linked to only one account. The ID number is stored only as a secure hash.</p>
+    </div>
+    <div class="foot">
+      <div class="hint" id="regHint" style="text-align:center">Verify your contact number to enable Register.</div>
+      <button class="btn" id="register" type="button" disabled>Register</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 3: SELECT SEATS -->
+  <section class="screen" id="s3" aria-label="Select Seats">
+    <div class="top"><div class="logo" aria-hidden="true">&#9822;</div><h1>SELECT SEATS</h1><button class="x" type="button" data-close aria-label="Cancel booking">X</button></div>
+    <div class="rule"></div>
+    <div class="body">
+      <div class="carousel" id="evCards" role="group" aria-label="Choose a concert"></div>
+      <div class="dots" id="evDots"></div>
+      <div class="tabs" id="tierTabs" role="group" aria-label="Choose a ticket tier"></div>
+      <div class="map" role="group" aria-label="Seat map">
+        <div class="stage-l">STAGE</div>
+        <div class="grid" id="grid"></div>
+        <div class="legend"><span><i class="s t"></i>taken</span><span><i class="s"></i>empty</span><span><i class="s a"></i>assigned</span></div>
+      </div>
+      <div class="seatline" id="seatLine" aria-live="polite">Choose a concert and a tier. Best seats are assigned automatically; tap an empty seat in your tier to change.</div>
+      <div class="qty">
+        <div><b>QUANTITY</b><small>maximum of 6 tickets per account</small><br><small id="quota"></small></div>
+        <div class="stepper"><button type="button" id="qMinus" aria-label="Decrease quantity">-</button><output id="qVal" aria-live="polite">1</output><button type="button" id="qPlus" aria-label="Increase quantity">+</button></div>
+      </div>
+      <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center"><span class="chip hold" id="holdChip">Seat held: --:--</span><button class="linkbtn" type="button" data-go="6" style="padding:0 4px">My Tickets</button></div>
+      <div class="msg" id="s3msg" aria-live="polite" style="margin-top:6px"></div>
+    </div>
+    <div class="foot">
+      <div class="hint" id="s3hint" style="text-align:center"></div>
+      <button class="btn" id="s3next" type="button" disabled>Next</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 4: REVIEW TICKET -->
+  <section class="screen" id="s4" aria-label="Review Ticket">
+    <div class="top"><div class="logo" aria-hidden="true">&#9822;</div><h1>REVIEW TICKET</h1><button class="x" type="button" data-close aria-label="Cancel booking">X</button></div>
+    <div class="rule"></div>
+    <div class="body">
+      <div class="h3"><span>TICKET HOLDERS</span><span id="hCount"></span></div>
+      <div class="card">
+        <div class="hint" id="hSeat" style="margin-bottom:8px;font-weight:700"></div>
+        <div class="field" id="h-name"><label for="hName">Holder Name</label><input id="hName" autocomplete="off" placeholder="Holder Name"><div class="msg" aria-live="polite"></div></div>
+        <div class="field" id="h-contact"><label for="hContact">Contact Number</label><input id="hContact" inputmode="tel" autocomplete="off" placeholder="+63 9XX XXX XXXX"><div class="msg" aria-live="polite"></div></div>
+        <div class="field" id="h-birth"><label for="hBirth">Birthday</label><input id="hBirth" type="date"><div class="msg" aria-live="polite"></div></div>
+        <div class="hint" id="ageNote" style="margin-bottom:8px"></div>
+        <div style="display:grid;gap:8px">
+          <button class="btn blue" id="nextHolder" type="button">Next Ticket Holder</button>
+          <button class="btn green" id="viewSum" type="button">View Summary</button>
+          <div style="display:flex;justify-content:space-between">
+            <button class="linkbtn" id="prevHolder" type="button" style="padding:0 4px">Previous holder</button>
+            <button class="linkbtn" id="useMe" type="button" style="padding:0 4px">Use my details</button>
+          </div>
+        </div>
+      </div>
+      <div class="h3" style="margin-top:16px" id="sumHead"><span>ORDER SUMMARY</span><span class="chip hold" id="holdChip4" style="padding:4px 10px">Seat held: --:--</span></div>
+      <div class="sum" id="sum"></div>
+      <div class="msg" id="s4msg" aria-live="polite" style="margin-top:8px"></div>
+    </div>
+    <div class="foot">
+      <div class="row2">
+        <button class="btn light" id="edit" type="button">Edit</button>
+        <button class="btn" id="generate" type="button" disabled>Generate Ticket</button>
+      </div>
+      <div class="hint" style="text-align:center">Payment is simulated in this system (out of scope).</div>
+    </div>
+  </section>
+
+  <!-- SCREEN 5: DIGITAL TICKET -->
+  <section class="screen" id="s5" aria-label="Digital Ticket">
+    <div class="top"><div class="logo" aria-hidden="true">&#9822;</div><h1 class="nox">DIGITAL TICKET</h1></div>
+    <div class="rule"></div>
+    <div class="body">
+      <div class="status" id="s5status">Ticket Ready<i aria-hidden="true"></i></div>
+      <div class="tix" id="tix"></div>
+      <div class="dots" id="tixDots"></div>
+      <div style="text-align:center"><button class="linkbtn" type="button" data-go="6">View all my tickets</button></div>
+    </div>
+    <div class="foot">
+      <button class="btn light" id="another" type="button">Purchase Another Ticket</button>
+      <button class="btn" id="exit" type="button">Exit</button>
+    </div>
+  </section>
+
+  <!-- SCREEN 6: MY TICKETS + TRANSFERS -->
+  <section class="screen" id="s6" aria-label="My Tickets">
+    <div class="top"><div class="logo" aria-hidden="true">&#9822;</div><h1>MY TICKETS</h1><button class="x" type="button" data-home aria-label="Back to Welcome">X</button></div>
+    <div class="rule"></div>
+    <div class="body" id="mineBody"><p class="empty">Loading&hellip;</p></div>
+    <div class="foot">
+      <button class="btn" type="button" data-go="3">Buy Tickets</button>
+      <button class="linkbtn" id="signOut6" type="button">Sign out</button>
+    </div>
+  </section>
+
+  <div class="sms hide" id="sms" role="status"></div>
+  <div class="toast hide" id="toast" role="status"></div>
+  <div class="overlay hide" id="overlay"></div>
+</main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/common.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
