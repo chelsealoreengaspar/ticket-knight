@@ -84,7 +84,7 @@
     modal('Leave the gate scanner?',
       'Exit keeps you signed in and keeps the offline data, so this device can resume scanning right away.' +
       (signedIn ? ' Sign out & exit clears this gate setup for the next staff member.' : '') + unsynced,
-      [{ label: 'Exit to Welcome', fn: async () => { await stopCam(); location.href = 'index.html'; } }]
+      [{ label: 'Exit', fn: async () => { await stopCam(); location.href = 'index.html'; } }]
         .concat(signedIn ? [{ label: 'Sign out & exit', cls: 'ghost', fn: async () => { await stopCam(); await signOutScanner(); location.href = 'index.html'; } }] : [])
         .concat([{ label: 'Stay', cls: 'light' }]));
   }
