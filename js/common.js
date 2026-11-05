@@ -42,6 +42,22 @@
     if (n.matches && n.matches('input[type=password]')) addEye(n); else if (n.querySelectorAll) scanEyes(n);
   }))).observe(document.documentElement, { childList: true, subtree: true });
 
+  // Date fields: show "Select birthday" until a date is chosen (iPhone shows today's date otherwise).
+  function wrapDate(input) {
+    if (input.dataset.dt) return;
+    input.dataset.dt = '1';
+    const w = document.createElement('span');
+    w.className = 'dt'; w.dataset.ph = input.getAttribute('placeholder') || 'Select birthday';
+    input.parentNode.insertBefore(w, input); w.appendChild(input);
+    const sync = () => w.classList.toggle('dt-empty', !input.value);
+    input.addEventListener('input', sync); input.addEventListener('change', sync);
+    // also catch values set by code (e.g. switching ticket holders)
+    const d = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+    Object.defineProperty(input, 'value', { get() { return d.get.call(this); }, set(v) { d.set.call(this, v); sync(); } });
+    sync();
+  }
+  document.querySelectorAll('input[type=date]').forEach(wrapDate);
+
   const C = window.TK_CONFIG || {};
   const configured = !!(C.SUPABASE_URL && C.SUPABASE_ANON_KEY && !/YOUR-/i.test(C.SUPABASE_URL + C.SUPABASE_ANON_KEY));
   const sb = configured && window.supabase ? window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY) : null;

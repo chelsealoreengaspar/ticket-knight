@@ -425,3 +425,21 @@ button.s:hover{transform:scale(1.12)}
 .mono{font-size:12px}
 
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+/* Hide the browser's own reveal/clear buttons (Edge) so only our eye shows */
+input::-ms-reveal,input::-ms-clear{display:none}
+input[type=password]::-webkit-credentials-auto-fill-button{visibility:hidden}
+
+/* Date fields: iPhone Safari gives them a fixed minimum width, which pushed
+   Birthday into the Email box. Keep them inside their box, left aligned. */
+.two>*{min-width:0}
+input[type=date]{-webkit-appearance:none;appearance:none;display:block;min-width:0;max-width:100%;text-align:left;line-height:44px}
+input[type=date]::-webkit-date-and-time-value{text-align:left;margin:0}
+input[type=date]::-webkit-calendar-picker-indicator{opacity:.7}
+/* Empty date: iPhone shows today's date, so hide it and show a hint instead */
+.dt{position:relative;display:block}
+.dt.dt-empty input{color:transparent}
+.dt.dt-empty input::-webkit-datetime-edit{color:transparent}
+.dt.dt-empty::after{content:attr(data-ph);position:absolute;left:13px;top:0;line-height:48px;font-size:16px;color:#56627c;pointer-events:none}
+/* Phones: Birthday and Email each get a full row */
+@media (max-width:520px){.two{grid-template-columns:1fr;gap:0}}
