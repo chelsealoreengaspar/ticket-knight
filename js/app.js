@@ -144,7 +144,9 @@
   function resetS2Form() {
     Object.keys(F).forEach(k => { $(F[k]).value = ''; setErr(k, ''); });
     S.otp = { sent: false, expires: 0, token: null, verifiedContact: '' };
-    $('#otpIn').value = ''; $('#otpMsg').textContent = ''; $('#regMsg').textContent = ''; updateOtpUi();
+    $('#otpIn').value = ''; $('#otpMsg').textContent = ''; $('#regMsg').textContent = '';
+    $('#fPass').type = 'password'; $('#otpIn').type = 'password';   // secrets start hidden again
+    updateOtpUi();
   }
   function isVerified() { return !!S.otp.token && TK.normPhone($('#fContact').value) === S.otp.verifiedContact; }
   function updateOtpUi() {

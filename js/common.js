@@ -8,6 +8,40 @@
     img.src = 'img/logo.png';
   })();
 
+  // Show / hide toggle (eye icon) for every password and OTP field.
+  // Fields start hidden; the user taps the eye to view what they typed.
+  const EYE = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const EYE_OFF = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.1 10.1 0 0 1 12 19C5 19 1 12 1 12a18.5 18.5 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.1 9.1 0 0 1 12 4c7 0 11 7 11 7a18.6 18.6 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+  function addEye(input) {
+    if (input.dataset.eye) return;
+    input.dataset.eye = '1';
+    const wrap = document.createElement('span');
+    wrap.className = 'pw';
+    input.parentNode.insertBefore(wrap, input);
+    wrap.appendChild(input);
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'pw-eye';
+    const what = input.id === 'otpIn' ? 'one-time password' : 'password';
+    const sync = () => {
+      const shown = input.type === 'text';
+      btn.innerHTML = shown ? EYE_OFF : EYE;
+      btn.setAttribute('aria-label', (shown ? 'Hide ' : 'Show ') + what);
+      btn.setAttribute('aria-pressed', String(shown));
+      btn.title = shown ? 'Hide' : 'Show';
+      btn.disabled = input.disabled;
+    };
+    btn.onclick = () => { input.type = input.type === 'password' ? 'text' : 'password'; sync(); input.focus(); };
+    new MutationObserver(sync).observe(input, { attributes: true, attributeFilter: ['disabled', 'type'] });
+    wrap.appendChild(btn); sync();
+  }
+  function scanEyes(root) { (root || document).querySelectorAll('input[type=password]').forEach(addEye); }
+  scanEyes();
+  // Sign-in popups are built later, so watch for new password fields too.
+  new MutationObserver(muts => muts.forEach(m => m.addedNodes.forEach(n => {
+    if (n.nodeType !== 1) return;
+    if (n.matches && n.matches('input[type=password]')) addEye(n); else if (n.querySelectorAll) scanEyes(n);
+  }))).observe(document.documentElement, { childList: true, subtree: true });
+
   const C = window.TK_CONFIG || {};
   const configured = !!(C.SUPABASE_URL && C.SUPABASE_ANON_KEY && !/YOUR-/i.test(C.SUPABASE_URL + C.SUPABASE_ANON_KEY));
   const sb = configured && window.supabase ? window.supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY) : null;
